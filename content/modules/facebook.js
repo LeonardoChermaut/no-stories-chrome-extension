@@ -1,0 +1,21 @@
+const FacebookStoriesRemover = {
+  selectors: [
+    ".x9f619.x1n2onr6.x1ja2u2z.x1wsgfga.x9otpla.xwib8y2.x1y1aw1k",
+    'div[aria-label="Bandeja de stories"][role="grid"]',
+    'div[aria-label="Stories tray"][role="grid"]',
+    '[data-pagelet*="Stories"]',
+    '[data-pagelet*="story"]',
+  ],
+
+  remove: () => {
+    for (const selector of FacebookStoriesRemover.selectors) {
+      const elements = document.querySelectorAll(selector);
+
+      if (elements.length > 0) {
+        elements.forEach((el) => el.remove());
+        return true;
+      }
+    }
+    return false;
+  },
+};
