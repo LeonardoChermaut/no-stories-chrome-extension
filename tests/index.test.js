@@ -4,8 +4,8 @@ const { locations } = require("../src/utils/utils");
 describe("Content Script", () => {
   beforeEach(() => {
     jest.resetModules();
-    global.facebook = { removeStoriesHtmlElement: jest.fn() };
-    global.instagram = { removeStoriesHtmlElement: jest.fn() };
+    global.Facebook = { removeStoriesHtmlElement: jest.fn() };
+    global.Instagram = { removeStoriesHtmlElement: jest.fn() };
 
     jest.useFakeTimers();
   });

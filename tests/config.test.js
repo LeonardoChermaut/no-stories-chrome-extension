@@ -1,11 +1,13 @@
+const { createElement } = require("../src/utils/utils");
+
 describe("Popup Config", () => {
   let popup;
 
   beforeEach(() => {
-    document.body.innerHTML = `
+    createElement(`
       <input type="checkbox" id="facebook" />
       <input type="checkbox" id="instagram" />
-    `;
+    `);
     jest.resetModules();
     popup = require("../src/popup/popup");
   });
