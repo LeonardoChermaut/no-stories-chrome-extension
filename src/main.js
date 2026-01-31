@@ -1,3 +1,6 @@
+const FacebookStoriesRemover = require("./modules/facebook");
+const InstagramStoriesRemover = require("./modules/instagram");
+
 (() => {
   const STORAGE_KEY = "disableStoriesConfig";
   const DEFAULTS = { facebook: true, instagram: true };
@@ -79,7 +82,6 @@
       isFacebook,
       isInstagram,
       run,
-      // expose init for testing if needed, though run is enough for logic
     };
   }
 })();

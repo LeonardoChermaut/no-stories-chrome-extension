@@ -54,6 +54,6 @@ if (typeof module !== "undefined") {
     getCurrentConfig,
     updateUI,
     loadConfig,
-    handlers: { handleChange }, // export for potential testing if needed, though not requested
+    handlers: { handleChange },
   };
 }
