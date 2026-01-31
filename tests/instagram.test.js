@@ -1,23 +1,23 @@
-const InstagramStoriesRemover = require("../src/modules/instagram");
+const instagram = require("../src/modules/instagram");
 
-describe("InstagramStoriesRemover", () => {
-  beforeEach(() => {
-    document.body.innerHTML = "";
-  });
+const { createElement } = require("../src/utils/utils");
+
+describe("Instagram", () => {
+  beforeEach(() => (document.body.innerHTML = ""));
 
   test("Should remove element with data-pagelet story_tray", () => {
-    document.body.innerHTML = '<div data-pagelet="story_tray">stories</div>';
+    createElement('<div data-pagelet="story_tray">stories</div>');
 
-    const result = InstagramStoriesRemover.remove();
+    const result = instagram.removeStoriesHtmlElement();
 
     expect(result).toBe(true);
     expect(document.querySelector('[data-pagelet="story_tray"]')).toBeNull();
   });
 
   test("Should remove element with specific Instagram class", () => {
-    document.body.innerHTML = '<div class="x1njnjl6">stories</div>';
+    createElement('<div class="x1njnjl6">stories</div>');
 
-    const result = InstagramStoriesRemover.remove();
+    const result = instagram.removeStoriesHtmlElement();
 
     expect(result).toBe(true);
     expect(document.querySelectorAll(".x1njnjl6").length).toBe(0);

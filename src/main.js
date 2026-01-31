@@ -1,12 +1,14 @@
-const FacebookStoriesRemover = require("./modules/facebook");
-const InstagramStoriesRemover = require("./modules/instagram");
+const facebook = require("./modules/facebook");
+const instagram = require("./modules/instagram");
 
 (() => {
   const STORAGE_KEY = "disableStoriesConfig";
   const DEFAULTS = { facebook: true, instagram: true };
+  const INTERVAL = 2000;
 
-  const isFacebook = (loc = location) => loc.hostname.includes("facebook.com");
-  const isInstagram = (loc = location) =>
+  const isFacebookUrl = (loc = location) =>
+    loc.hostname.includes("facebook.com");
+  const isInstagramUrl = (loc = location) =>
     loc.hostname.includes("instagram.com");
 
   const loadConfig = () =>
@@ -23,12 +25,12 @@ const InstagramStoriesRemover = require("./modules/instagram");
   };
 
   const run = (loc = location) => {
-    if (isFacebook(loc) && state.config.facebook) {
-      FacebookStoriesRemover.remove();
+    if (isFacebookUrl(loc) && state.config.facebook) {
+      facebook.removeStoriesHtmlElement();
     }
 
-    if (isInstagram(loc) && state.config.instagram) {
-      InstagramStoriesRemover.remove();
+    if (isInstagramUrl(loc) && state.config.instagram) {
+      instagram.removeStoriesHtmlElement();
     }
   };
 
@@ -37,9 +39,8 @@ const InstagramStoriesRemover = require("./modules/instagram");
     state.observer.observe(document.body, { childList: true, subtree: true });
   };
 
-  const startInterval = () => {
-    state.intervalId = setInterval(() => run(), 2100);
-  };
+  const startInterval = () =>
+    (state.intervalId = setInterval(() => run(), INTERVAL));
 
   const handleConfigChange = (changes, area) => {
     if (area !== "sync" || !changes[STORAGE_KEY]) return;
@@ -47,12 +48,12 @@ const InstagramStoriesRemover = require("./modules/instagram");
     const previous = state.config;
     const current = changes[STORAGE_KEY].newValue;
 
-    if (isFacebook() && previous.facebook && !current.facebook) {
+    if (isFacebookUrl() && previous.facebook && !current.facebook) {
       location.reload();
       return;
     }
 
-    if (isInstagram() && previous.instagram && !current.instagram) {
+    if (isInstagramUrl() && previous.instagram && !current.instagram) {
       location.reload();
       return;
     }
@@ -60,7 +61,7 @@ const InstagramStoriesRemover = require("./modules/instagram");
     state.config = current;
     run();
 
-    console.log("[Disable Stories] Config updated:", state.config);
+    console.log("[NO STORIES] Config updated:", state.config);
   };
 
   const init = async () => {
@@ -72,15 +73,15 @@ const InstagramStoriesRemover = require("./modules/instagram");
 
     chrome.storage.onChanged.addListener(handleConfigChange);
 
-    console.log("[Disable Stories] Active:", state.config);
+    console.log("[NO STORIES] Active:", state.config);
   };
 
   document.body ? init() : document.addEventListener("DOMContentLoaded", init);
 
   if (typeof module !== "undefined") {
     module.exports = {
-      isFacebook,
-      isInstagram,
+      isFacebookUrl,
+      isInstagramUrl,
       run,
     };
   }

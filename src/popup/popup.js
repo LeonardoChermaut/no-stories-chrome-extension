@@ -1,28 +1,19 @@
-const STORAGE_KEY = "disableStoriesConfig";
+const STORAGE_KEY = "noStoriesConfiguration";
 const DEFAULTS = { facebook: true, instagram: true };
 
-const getElement = (id) => document.getElementById(id);
-
-const elements = {
-  get facebook() {
-    return getElement("facebook");
-  },
-  get instagram() {
-    return getElement("instagram");
-  },
-};
+const { elements } = require("../utils/utils");
 
 const loadConfig = () =>
-  new Promise((resolve) => {
-    chrome.storage.sync.get(STORAGE_KEY, (result) => {
-      resolve(result[STORAGE_KEY] || DEFAULTS);
-    });
-  });
+  new Promise((resolve) =>
+    chrome.storage.sync.get(STORAGE_KEY, (result) =>
+      resolve(result[STORAGE_KEY] || DEFAULTS),
+    ),
+  );
 
 const saveConfig = (config) =>
-  new Promise((resolve) => {
-    chrome.storage.sync.set({ [STORAGE_KEY]: config }, resolve);
-  });
+  new Promise((resolve) =>
+    chrome.storage.sync.set({ [STORAGE_KEY]: config }, resolve),
+  );
 
 const updateUI = (config) => {
   elements.facebook.checked = config.facebook;

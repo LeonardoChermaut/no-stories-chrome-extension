@@ -11,11 +11,11 @@ describe("Popup Config", () => {
   });
 
   test("Should get current config", () => {
-    const facebookCheckbox = document.getElementById("facebook");
-    const instagramCheckbox = document.getElementById("instagram");
+    const facebookCheckboxEl = document.getElementById("facebook");
+    const instagramCheckboxEl = document.getElementById("instagram");
 
-    facebookCheckbox.checked = true;
-    instagramCheckbox.checked = false;
+    facebookCheckboxEl.checked = true;
+    instagramCheckboxEl.checked = false;
     const config = popup.getCurrentConfig();
 
     expect(config).toEqual({ facebook: true, instagram: false });
