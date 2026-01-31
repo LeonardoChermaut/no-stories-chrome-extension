@@ -28,6 +28,19 @@ A instalação é feita manualmente pelo Modo do Desenvolvedor.
 2. Utilize as caixas de seleção para ativar ou desativar o bloqueio por rede social.
 3. A página recarregará automaticamente ao alterar a configuração para exibir os stories novamente.
 
+## Testes
+
+O projeto inclui testes unitários para validar a lógica de remoção.
+
+1. Instale as dependências:
+   ```bash
+   npm install
+   ```
+2. Execute os testes:
+   ```bash
+   npm test
+   ```
+
 ## Contribuição
 
 Envie issues ou pull requests para reportar erros ou atualizar seletores CSS.
