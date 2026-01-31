@@ -2,8 +2,9 @@
   const STORAGE_KEY = "disableStoriesConfig";
   const DEFAULTS = { facebook: true, instagram: true };
 
-  const isFacebook = () => location.hostname.includes("facebook.com");
-  const isInstagram = () => location.hostname.includes("instagram.com");
+  const isFacebook = (loc = location) => loc.hostname.includes("facebook.com");
+  const isInstagram = (loc = location) =>
+    loc.hostname.includes("instagram.com");
 
   const loadConfig = () =>
     new Promise((resolve) => {
@@ -18,23 +19,23 @@
     intervalId: null,
   };
 
-  const run = () => {
-    if (isFacebook() && state.config.facebook) {
+  const run = (loc = location) => {
+    if (isFacebook(loc) && state.config.facebook) {
       FacebookStoriesRemover.remove();
     }
 
-    if (isInstagram() && state.config.instagram) {
+    if (isInstagram(loc) && state.config.instagram) {
       InstagramStoriesRemover.remove();
     }
   };
 
   const observeDom = () => {
-    state.observer = new MutationObserver(run);
+    state.observer = new MutationObserver(() => run());
     state.observer.observe(document.body, { childList: true, subtree: true });
   };
 
   const startInterval = () => {
-    state.intervalId = setInterval(run, 2100);
+    state.intervalId = setInterval(() => run(), 2100);
   };
 
   const handleConfigChange = (changes, area) => {
@@ -72,4 +73,13 @@
   };
 
   document.body ? init() : document.addEventListener("DOMContentLoaded", init);
+
+  if (typeof module !== "undefined") {
+    module.exports = {
+      isFacebook,
+      isInstagram,
+      run,
+      // expose init for testing if needed, though run is enough for logic
+    };
+  }
 })();

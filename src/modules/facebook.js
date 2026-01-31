@@ -19,3 +19,7 @@ const FacebookStoriesRemover = {
     return false;
   },
 };
+
+if (typeof module !== "undefined") {
+  module.exports = FacebookStoriesRemover;
+}

@@ -13,3 +13,7 @@ const InstagramStoriesRemover = {
     return false;
   },
 };
+
+if (typeof module !== "undefined") {
+  module.exports = InstagramStoriesRemover;
+}

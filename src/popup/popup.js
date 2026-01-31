@@ -1,9 +1,15 @@
 const STORAGE_KEY = "disableStoriesConfig";
 const DEFAULTS = { facebook: true, instagram: true };
 
+const getElement = (id) => document.getElementById(id);
+
 const elements = {
-  facebook: document.getElementById("facebook"),
-  instagram: document.getElementById("instagram"),
+  get facebook() {
+    return getElement("facebook");
+  },
+  get instagram() {
+    return getElement("instagram");
+  },
 };
 
 const loadConfig = () =>
@@ -42,3 +48,12 @@ const init = async () => {
 };
 
 init();
+
+if (typeof module !== "undefined") {
+  module.exports = {
+    getCurrentConfig,
+    updateUI,
+    loadConfig,
+    handlers: { handleChange }, // export for potential testing if needed, though not requested
+  };
+}
