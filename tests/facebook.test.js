@@ -1,4 +1,4 @@
-const facebook = require("../src/modules/facebook");
+const Facebook = require("../src/modules/facebook");
 
 const { createElement } = require("../src/utils/utils");
 
@@ -8,7 +8,7 @@ describe("Facebook", () => {
   test("Should remove element when selector is found", () => {
     createElement('<div data-pagelet="Stories">content</div>');
 
-    const result = facebook.removeStoriesHtmlElement();
+    const result = Facebook.removeStoriesHtmlElement();
 
     expect(result).toBe(true);
     expect(document.querySelector('[data-pagelet="Stories"]')).toBeNull();
@@ -17,7 +17,7 @@ describe("Facebook", () => {
   test("Should return false when no selector is found", () => {
     createElement("<div>outro conteúdo</div>");
 
-    const result = facebook.removeStoriesHtmlElement();
+    const result = Facebook.removeStoriesHtmlElement();
 
     expect(result).toBe(false);
   });
@@ -28,7 +28,7 @@ describe("Facebook", () => {
       <div data-pagelet="Stories">2</div>
     `);
 
-    facebook.removeStoriesHtmlElement();
+    Facebook.removeStoriesHtmlElement();
 
     expect(document.querySelectorAll('[data-pagelet="Stories"]').length).toBe(
       0,

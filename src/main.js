@@ -1,5 +1,11 @@
-const facebook = require("./modules/facebook");
-const instagram = require("./modules/instagram");
+const Facebook =
+  typeof require !== "undefined"
+    ? require("./modules/facebook")
+    : window.Facebook;
+const Instagram =
+  typeof require !== "undefined"
+    ? require("./modules/instagram")
+    : window.Instagram;
 
 (() => {
   const STORAGE_KEY = "disableStoriesConfig";
@@ -26,11 +32,11 @@ const instagram = require("./modules/instagram");
 
   const run = (loc = location) => {
     if (isFacebookUrl(loc) && state.config.facebook) {
-      facebook.removeStoriesHtmlElement();
+      Facebook.removeStoriesHtmlElement();
     }
 
     if (isInstagramUrl(loc) && state.config.instagram) {
-      instagram.removeStoriesHtmlElement();
+      Instagram.removeStoriesHtmlElement();
     }
   };
 

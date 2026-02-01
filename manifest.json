@@ -20,6 +20,7 @@
         "https://instagram.com/*"
       ],
       "js": [
+        "src/utils/utils.js",
         "src/modules/facebook.js",
         "src/modules/instagram.js",
         "src/main.js"

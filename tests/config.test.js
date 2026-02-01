@@ -4,10 +4,8 @@ describe("Popup Config", () => {
   let popup;
 
   beforeEach(() => {
-    createElement(`
-      <input type="checkbox" id="facebook" />
-      <input type="checkbox" id="instagram" />
-    `);
+    createElement('<input type="checkbox" id="facebook" />');
+    createElement('<input type="checkbox" id="instagram" />');
     jest.resetModules();
     popup = require("../src/popup/popup");
   });

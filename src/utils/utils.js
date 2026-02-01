@@ -32,10 +32,20 @@ const removeHtmlBySelector = (selectors) => {
   return false;
 };
 
-module.exports = {
-  locations,
-  elements,
-  createElement,
-  getElement,
-  removeHtmlBySelector,
-};
+if (typeof window !== "undefined") {
+  window.removeHtmlBySelector = removeHtmlBySelector;
+  window.locations = locations;
+  window.elements = elements;
+  window.createElement = createElement;
+  window.getElement = getElement;
+}
+
+if (typeof module !== "undefined") {
+  module.exports = {
+    locations,
+    elements,
+    createElement,
+    getElement,
+    removeHtmlBySelector,
+  };
+}

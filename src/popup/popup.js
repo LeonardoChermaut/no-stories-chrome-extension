@@ -1,7 +1,9 @@
-const STORAGE_KEY = "noStoriesConfiguration";
+const STORAGE_KEY = "disableStoriesConfig";
 const DEFAULTS = { facebook: true, instagram: true };
 
-const { elements } = require("../utils/utils");
+const utils =
+  typeof require !== "undefined" ? require("../utils/utils") : window;
+const { elements } = utils;
 
 const loadConfig = () =>
   new Promise((resolve) =>
@@ -16,8 +18,10 @@ const saveConfig = (config) =>
   );
 
 const updateUI = (config) => {
-  elements.facebook.checked = config.facebook;
-  elements.instagram.checked = config.instagram;
+  if (elements && elements.facebook && elements.instagram) {
+    elements.facebook.checked = config.facebook;
+    elements.instagram.checked = config.instagram;
+  }
 };
 
 const getCurrentConfig = () => ({
@@ -34,11 +38,15 @@ const init = async () => {
   const config = await loadConfig();
   updateUI(config);
 
-  elements.facebook.addEventListener("change", handleChange);
-  elements.instagram.addEventListener("change", handleChange);
+  if (elements && elements.facebook)
+    elements.facebook.addEventListener("change", handleChange);
+  if (elements && elements.instagram)
+    elements.instagram.addEventListener("change", handleChange);
 };
 
-init();
+if (typeof module === "undefined") {
+  init();
+}
 
 if (typeof module !== "undefined") {
   module.exports = {
