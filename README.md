@@ -40,7 +40,3 @@ O projeto inclui testes unitários para validar a lógica de remoção.
    ```bash
    npm test
    ```
-
-## Contribuição
-
-Envie issues ou pull requests para reportar erros ou atualizar seletores CSS.
