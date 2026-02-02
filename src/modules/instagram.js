@@ -1,19 +1,9 @@
-(() => {
-  const utils =
-    typeof require !== "undefined" ? require("../utils/utils") : window;
-  const { removeHtmlBySelector } = utils;
+const Instagram = {
+  selectors: ['[data-pagelet="story_tray"]', ".x1njnjl6"],
 
-  const Instagram = {
-    selectors: ['[data-pagelet="story_tray"]', ".x1njnjl6"],
+  removeStoriesHtmlElement: () =>
+    Utils.removeHtmlBySelector(Instagram.selectors),
+};
 
-    removeStoriesHtmlElement: () => removeHtmlBySelector(Instagram.selectors),
-  };
-
-  if (typeof window !== "undefined") {
-    window.Instagram = Instagram;
-  }
-
-  if (typeof module !== "undefined") {
-    module.exports = Instagram;
-  }
-})();
+if (typeof window !== "undefined") window.Instagram = Instagram;
+if (typeof module !== "undefined") module.exports = Instagram;

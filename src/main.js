@@ -1,12 +1,3 @@
-const Facebook =
-  typeof require !== "undefined"
-    ? require("./modules/facebook")
-    : window.Facebook;
-const Instagram =
-  typeof require !== "undefined"
-    ? require("./modules/instagram")
-    : window.Instagram;
-
 (() => {
   const STORAGE_KEY = "disableStoriesConfig";
   const DEFAULTS = { facebook: true, instagram: true };
