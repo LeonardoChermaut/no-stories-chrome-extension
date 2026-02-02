@@ -13,6 +13,8 @@ const Utils = {
     },
   },
 
+  reloadPage: () => window.location.reload(),
+
   createElement: (html) => {
     const template = document.createElement("template");
     template.innerHTML = html;

@@ -46,12 +46,12 @@
     const current = changes[STORAGE_KEY].newValue;
 
     if (isFacebookUrl() && previous.facebook && !current.facebook) {
-      location.reload();
+      Utils.reloadPage();
       return;
     }
 
     if (isInstagramUrl() && previous.instagram && !current.instagram) {
-      location.reload();
+      Utils.reloadPage();
       return;
     }
 
