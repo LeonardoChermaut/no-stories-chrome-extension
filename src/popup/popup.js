@@ -1,40 +1,47 @@
-(() => {
-  const STORAGE_KEY = "disableStoriesConfig";
-  const DEFAULTS = { facebook: true, instagram: true };
-  const elements = Utils.elements;
+const STORAGE_KEY = "disableStoriesConfig";
+const { elements, storage } = Utils;
 
-  const loadConfig = () =>
-    new Promise((resolve) =>
-      chrome.storage.sync.get(STORAGE_KEY, (result) =>
-        resolve(result[STORAGE_KEY] || DEFAULTS),
-      ),
-    );
+const loadConfiguration = () =>
+  new Promise((resolve) =>
+    chrome.storage.sync.get(STORAGE_KEY, (result) =>
+      resolve(result[STORAGE_KEY] || storage.get()),
+    ),
+  );
 
-  const saveConfig = (config) =>
-    new Promise((resolve) =>
-      chrome.storage.sync.set({ [STORAGE_KEY]: config }, resolve),
-    );
+const saveConfiguration = (config) =>
+  new Promise((resolve) =>
+    chrome.storage.sync.set({ [STORAGE_KEY]: config }, resolve),
+  );
 
-  const updateUI = (config) => {
-    elements.facebook.checked = config.facebook;
-    elements.instagram.checked = config.instagram;
+const handleChangeCheckbox = (config) => {
+  if (!elements.facebook || !elements.instagram) return;
+
+  elements.facebook.checked = config.facebookStoriesEnabled;
+  elements.instagram.checked = config.instagramStoriesEnabled;
+};
+
+const handleChangeConfiguration = async () =>
+  await saveConfiguration({
+    facebookStoriesEnabled: elements.facebook?.checked,
+    instagramStoriesEnabled: elements.instagram?.checked,
+  });
+
+const init = async () => {
+  const config = await loadConfiguration();
+  handleChangeCheckbox(config);
+
+  elements.facebook?.addEventListener("change", handleChangeConfiguration);
+  elements.instagram?.addEventListener("change", handleChangeConfiguration);
+};
+
+init();
+
+if (typeof module !== "undefined") {
+  module.exports = {
+    getCurrentConfig: () => ({
+      facebookStoriesEnabled: elements.facebook?.checked,
+      instagramStoriesEnabled: elements.instagram?.checked,
+    }),
+    handleChangeCheckbox,
   };
-
-  const handleChange = async () => {
-    const config = {
-      facebook: elements.facebook.checked,
-      instagram: elements.instagram.checked,
-    };
-    await saveConfig(config);
-  };
-
-  const init = async () => {
-    const config = await loadConfig();
-    updateUI(config);
-
-    elements.facebook.addEventListener("change", handleChange);
-    elements.instagram.addEventListener("change", handleChange);
-  };
-
-  init();
-})();
+}

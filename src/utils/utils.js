@@ -1,7 +1,12 @@
 const Utils = {
-  locations: {
-    facebook: { hostname: "www.facebook.com" },
-    instagram: { hostname: "www.instagram.com" },
+  storage: {
+    STORIES_KEY: "disableStoriesConfig",
+    get: () => ({
+      facebookStoriesEnabled: true,
+      instagramStoriesEnabled: true,
+    }),
+    set: (config) =>
+      chrome.storage.sync.set({ [Utils.storage.STORIES_KEY]: config }),
   },
 
   elements: {
@@ -13,6 +18,11 @@ const Utils = {
     },
   },
 
+  isFacebookUrl: (loc = location) =>
+    loc.hostname.includes(Utils.locations.facebook.hostname),
+  isInstagramUrl: (loc = location) =>
+    loc.hostname.includes(Utils.locations.instagram.hostname),
+
   reloadPage: () => window.location.reload(),
 
   createElement: (html) => {
@@ -23,7 +33,7 @@ const Utils = {
 
   getElement: (id) => document.getElementById(id),
 
-  removeHtmlBySelector: (selectors) => {
+  removeHtmlBySelectors: (selectors) => {
     for (const selector of selectors) {
       const elements = document.querySelectorAll(selector);
 
