@@ -8,18 +8,18 @@ describe("Facebook", () => {
   test("Should remove element when selector is found", () => {
     createElement('<div data-pagelet="Stories">content</div>');
 
-    const result = Facebook.removeStoriesHtmlElement();
+    const storiesRemoved = Facebook.removeStoriesHtmlElement();
 
-    expect(result).toBe(true);
+    expect(storiesRemoved).toBe(true);
     expect(document.querySelector('[data-pagelet="Stories"]')).toBeNull();
   });
 
   test("Should return false when no selector is found", () => {
     createElement("<div>outro conteúdo</div>");
 
-    const result = Facebook.removeStoriesHtmlElement();
+    const storiesRemoved = Facebook.removeStoriesHtmlElement();
 
-    expect(result).toBe(false);
+    expect(storiesRemoved).toBe(false);
   });
 
   test("Should remove multiple elements with the same selector", () => {
