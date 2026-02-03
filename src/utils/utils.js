@@ -18,11 +18,6 @@ const Utils = {
     },
   },
 
-  isFacebookUrl: (loc = location) =>
-    loc.hostname.includes(Utils.locations.facebook.hostname),
-  isInstagramUrl: (loc = location) =>
-    loc.hostname.includes(Utils.locations.instagram.hostname),
-
   reloadPage: () => window.location.reload(),
 
   createElement: (html) => {
