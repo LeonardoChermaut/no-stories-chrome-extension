@@ -2,7 +2,7 @@ const { createElement, elements } = require("../src/utils/utils");
 const {
   getCurrentConfig,
   handleChangeCheckbox,
-} = require("../src/popup/popup");
+} = require("../src/modules/popup/popup");
 
 describe("Popup", () => {
   let facebookCheckboxEl;

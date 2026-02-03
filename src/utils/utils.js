@@ -18,6 +18,32 @@ const Utils = {
     },
   },
 
+  updateCssAttributes: (config) => {
+    if (!config) return;
+
+    const html = document.documentElement;
+
+    if (config.facebookStoriesEnabled) {
+      html.setAttribute("data-no-stories-facebook", "enabled");
+    } else {
+      html.removeAttribute("data-no-stories-facebook");
+    }
+
+    if (config.instagramStoriesEnabled) {
+      html.setAttribute("data-no-stories-instagram", "enabled");
+    } else {
+      html.removeAttribute("data-no-stories-instagram");
+    }
+  },
+
+  debounce: (func = () => {}, wait = 500) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  },
+
   reloadPage: () => window.location.reload(),
 
   createElement: (html) => {

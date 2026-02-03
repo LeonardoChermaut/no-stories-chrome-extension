@@ -1,0 +1,4 @@
+html[data-no-stories-instagram="enabled"] [data-pagelet="story_tray"],
+html[data-no-stories-instagram="enabled"] .x1njnjl6 {
+    display: none !important;
+}

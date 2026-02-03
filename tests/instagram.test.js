@@ -1,4 +1,4 @@
-const Instagram = require("../src/modules/instagram");
+const Instagram = require("../src/modules/instagram/instagram");
 
 const { createElement } = require("../src/utils/utils");
 

@@ -5,7 +5,7 @@
   "description": "Remove Stories from Facebook and Instagram to keep your feed clean and distraction-free.",
   "permissions": ["storage", "tabs"],
   "action": {
-    "default_popup": "src/popup/popup.html",
+    "default_popup": "src/modules/popup/popup.html",
     "default_icon": {
       "48": "public/icons/icon48.png",
       "128": "public/icons/icon128.png"
@@ -21,11 +21,15 @@
       ],
       "js": [
         "src/utils/utils.js",
-        "src/modules/facebook.js",
-        "src/modules/instagram.js",
+        "src/modules/facebook/facebook.js",
+        "src/modules/instagram/instagram.js",
         "src/main.js"
       ],
-      "run_at": "document_idle"
+      "css": [
+        "src/modules/facebook/facebook.css",
+        "src/modules/instagram/instagram.css"
+      ],
+      "run_at": "document_start"
     }
   ],
   "icons": {

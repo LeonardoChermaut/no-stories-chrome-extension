@@ -1,4 +1,4 @@
-const Facebook = require("../src/modules/facebook");
+const Facebook = require("../src/modules/facebook/facebook");
 
 const { createElement } = require("../src/utils/utils");
 

@@ -1,0 +1,7 @@
+html[data-no-stories-facebook="enabled"] .x9f619.x1n2onr6.x1ja2u2z.x1wsgfga.x9otpla.xwib8y2.x1y1aw1k,
+html[data-no-stories-facebook="enabled"] div[aria-label="Bandeja de stories"][role="grid"],
+html[data-no-stories-facebook="enabled"] div[aria-label="Stories tray"][role="grid"],
+html[data-no-stories-facebook="enabled"] [data-pagelet*="Stories"],
+html[data-no-stories-facebook="enabled"] [data-pagelet*="story"] {
+    display: none !important;
+}

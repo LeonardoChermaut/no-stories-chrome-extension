@@ -1,16 +1,15 @@
-const STORAGE_KEY = "disableStoriesConfig";
 const { elements, storage } = Utils;
 
 const loadConfiguration = () =>
   new Promise((resolve) =>
-    chrome.storage.sync.get(STORAGE_KEY, (result) =>
-      resolve(result[STORAGE_KEY] || storage.get()),
+    chrome.storage.sync.get(storage.STORIES_KEY, (result) =>
+      resolve(result[storage.STORIES_KEY] || storage.get()),
     ),
   );
 
 const saveConfiguration = (config) =>
   new Promise((resolve) =>
-    chrome.storage.sync.set({ [STORAGE_KEY]: config }, resolve),
+    chrome.storage.sync.set({ [storage.STORIES_KEY]: config }, resolve),
   );
 
 const handleChangeCheckbox = (config) => {
@@ -26,7 +25,7 @@ const handleChangeConfiguration = async () =>
     instagramStoriesEnabled: elements.instagram?.checked,
   });
 
-const start = async () => {
+const init = async () => {
   const config = await loadConfiguration();
   handleChangeCheckbox(config);
 
@@ -34,7 +33,7 @@ const start = async () => {
   elements.instagram?.addEventListener("change", handleChangeConfiguration);
 };
 
-start();
+init();
 
 if (typeof module !== "undefined") {
   module.exports = {
