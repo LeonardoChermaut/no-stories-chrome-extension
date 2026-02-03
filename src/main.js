@@ -16,7 +16,7 @@
   const { isInstagramUrl, removeStoriesHtmlElement: removeInstagramStories } =
     Instagram;
 
-  const loadConfig = () =>
+  const loadConfiguration = () =>
     new Promise((resolve) =>
       chrome.storage.sync.get(STORIES_KEY, (result) =>
         resolve(result[STORIES_KEY] || Utils.storage.get()),
@@ -80,8 +80,8 @@
     console.log("[NO STORIES] Config updated:", CURRENT_STATE.config);
   };
 
-  const init = async () => {
-    CURRENT_STATE.config = await loadConfig();
+  const start = async () => {
+    CURRENT_STATE.config = await loadConfiguration();
 
     handleRemoveStories();
     mutationObserverDom();
@@ -92,11 +92,13 @@
     console.log("[NO STORIES] Active:", CURRENT_STATE.config);
   };
 
-  document.body ? init() : document.addEventListener("DOMContentLoaded", init);
+  document.body
+    ? start()
+    : document.addEventListener("DOMContentLoaded", start);
 
   if (typeof module !== "undefined") {
     module.exports = {
-      loadConfig,
+      loadConfiguration,
     };
   }
 })();

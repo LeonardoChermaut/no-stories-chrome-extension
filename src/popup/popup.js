@@ -26,7 +26,7 @@ const handleChangeConfiguration = async () =>
     instagramStoriesEnabled: elements.instagram?.checked,
   });
 
-const init = async () => {
+const start = async () => {
   const config = await loadConfiguration();
   handleChangeCheckbox(config);
 
@@ -34,7 +34,7 @@ const init = async () => {
   elements.instagram?.addEventListener("change", handleChangeConfiguration);
 };
 
-init();
+start();
 
 if (typeof module !== "undefined") {
   module.exports = {
