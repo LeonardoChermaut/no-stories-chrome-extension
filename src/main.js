@@ -17,7 +17,6 @@
 
   const updateCssAttributes = (config) => {
     if (!config) return;
-
     const html = document.documentElement;
 
     if (config.facebookStoriesEnabled) {
@@ -26,11 +25,11 @@
       html.removeAttribute("data-no-stories-facebook");
     }
 
-    if (config.instagramStoriesEnabled) {
-      html.setAttribute("data-no-stories-instagram", "enabled");
-    } else {
-      html.removeAttribute("data-no-stories-instagram");
-    }
+    // if (config.instagramStoriesEnabled) {
+    //   html.setAttribute("data-no-stories-instagram", "enabled");
+    // } else {
+    //   html.removeAttribute("data-no-stories-instagram");
+    // }
   };
 
   const handleRemoveStories = () => {
@@ -88,9 +87,9 @@
   const init = async () => {
     state.config = await get();
 
-    updateCssAttributes(state.config);
+    // TODO: Fix this so that when stories are enabled to be viewed, the CSS properties are not imported.
+    // updateCssAttributes(state.config);
     handleRemoveStories();
-
     setupMutationObserver();
 
     chrome.storage.onChanged.addListener(handleChangeConfiguration);
