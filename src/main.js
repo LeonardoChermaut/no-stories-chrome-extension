@@ -1,5 +1,5 @@
 (() => {
-  const CURRENT_STATE = {
+  const state = {
     config: null,
     observer: null,
   };
@@ -7,38 +7,48 @@
   const {
     reloadPage,
     debounce,
-    updateCssAttributes,
-    storage: { STORIES_KEY },
+    storage: { STORIES_KEY, get },
   } = Utils;
 
-  const { isFacebookUrl, removeStoriesHtmlElement: removeFacebookStories } =
+  const { isFacebookDomain, removeStoriesFromDom: removeFacebookStories } =
     Facebook;
-  const { isInstagramUrl, removeStoriesHtmlElement: removeInstagramStories } =
+  const { isInstagramDomain, removeStoriesFromDom: removeInstagramStories } =
     Instagram;
 
-  const loadConfiguration = () =>
-    new Promise((resolve) =>
-      chrome.storage.sync.get(STORIES_KEY, (result) =>
-        resolve(result[STORIES_KEY] || Utils.storage.get()),
-      ),
-    );
+  const updateCssAttributes = (config) => {
+    if (!config) return;
+
+    const html = document.documentElement;
+
+    if (config.facebookStoriesEnabled) {
+      html.setAttribute("data-no-stories-facebook", "enabled");
+    } else {
+      html.removeAttribute("data-no-stories-facebook");
+    }
+
+    if (config.instagramStoriesEnabled) {
+      html.setAttribute("data-no-stories-instagram", "enabled");
+    } else {
+      html.removeAttribute("data-no-stories-instagram");
+    }
+  };
 
   const handleRemoveStories = () => {
-    if (isFacebookUrl() && CURRENT_STATE.config.facebookStoriesEnabled) {
+    if (isFacebookDomain() && state.config.facebookStoriesEnabled) {
       removeFacebookStories();
     }
 
-    if (isInstagramUrl() && CURRENT_STATE.config.instagramStoriesEnabled) {
+    if (isInstagramDomain() && state.config.instagramStoriesEnabled) {
       removeInstagramStories();
     }
   };
 
   const setupMutationObserver = () => {
-    if (CURRENT_STATE.observer) CURRENT_STATE.observer.disconnect();
+    if (state.observer) state.observer.disconnect();
 
     const debouncedRemove = debounce(handleRemoveStories, 150);
-    CURRENT_STATE.observer = new MutationObserver(debouncedRemove);
-    CURRENT_STATE.observer.observe(document.documentElement, {
+    state.observer = new MutationObserver(debouncedRemove);
+    state.observer.observe(document.documentElement, {
       childList: true,
       subtree: true,
     });
@@ -47,13 +57,13 @@
   const handleChangeConfiguration = (changes, area) => {
     if (area !== "sync" || !changes[STORIES_KEY]) return;
 
-    const previous = CURRENT_STATE.config;
+    const previous = state.config;
     const current = changes[STORIES_KEY]?.newValue;
 
     if (!current) return;
 
     if (
-      isFacebookUrl() &&
+      isFacebookDomain() &&
       previous.facebookStoriesEnabled &&
       !current.facebookStoriesEnabled
     ) {
@@ -62,7 +72,7 @@
     }
 
     if (
-      isInstagramUrl() &&
+      isInstagramDomain() &&
       previous.instagramStoriesEnabled &&
       !current.instagramStoriesEnabled
     ) {
@@ -70,15 +80,15 @@
       return;
     }
 
-    CURRENT_STATE.config = current;
+    state.config = current;
     updateCssAttributes(current);
     handleRemoveStories();
   };
 
   const init = async () => {
-    CURRENT_STATE.config = await loadConfiguration();
+    state.config = await get();
 
-    updateCssAttributes(CURRENT_STATE.config);
+    updateCssAttributes(state.config);
     handleRemoveStories();
 
     setupMutationObserver();
@@ -91,7 +101,7 @@
 
   if (typeof module !== "undefined") {
     module.exports = {
-      loadConfiguration,
+      fetchUserPreferences: get,
     };
   }
 })();

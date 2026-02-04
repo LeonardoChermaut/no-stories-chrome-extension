@@ -1,12 +1,13 @@
 const Instagram = {
   hostname: "www.instagram.com",
 
-  selectors: ['[data-pagelet="story_tray"]', ".x1njnjl6"],
+  storyContainersSelectors: ['[data-pagelet="story_tray"]', ".x1njnjl6"],
 
-  isInstagramUrl: (loc = location) => loc.hostname.includes(Instagram.hostname),
+  isInstagramDomain: (loc = location) =>
+    loc.hostname.includes(Instagram.hostname),
 
-  removeStoriesHtmlElement: () =>
-    Utils.removeHtmlBySelectors(Instagram.selectors),
+  removeStoriesFromDom: () =>
+    Utils.removeElementsBySelectors(Instagram.storyContainersSelectors),
 };
 
 if (typeof window !== "undefined") window.Instagram = Instagram;

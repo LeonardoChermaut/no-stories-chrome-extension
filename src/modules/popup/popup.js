@@ -1,36 +1,29 @@
-const { elements, storage } = Utils;
+const { storage, getElementById } = require("../../utils/utils");
 
-const loadConfiguration = () =>
-  new Promise((resolve) =>
-    chrome.storage.sync.get(storage.STORIES_KEY, (result) =>
-      resolve(result[storage.STORIES_KEY] || storage.get()),
-    ),
-  );
+const elements = {
+  facebook: getElementById("facebook"),
+  instagram: getElementById("instagram"),
+};
 
-const saveConfiguration = (config) =>
-  new Promise((resolve) =>
-    chrome.storage.sync.set({ [storage.STORIES_KEY]: config }, resolve),
-  );
-
-const handleChangeCheckbox = (config) => {
+const syncCheckboxesWithState = (config) => {
   if (!elements.facebook || !elements.instagram) return;
 
   elements.facebook.checked = config.facebookStoriesEnabled;
   elements.instagram.checked = config.instagramStoriesEnabled;
 };
 
-const handleChangeConfiguration = async () =>
-  await saveConfiguration({
+const updatePreferencesFromUI = async () =>
+  await storage.set({
     facebookStoriesEnabled: elements.facebook?.checked,
     instagramStoriesEnabled: elements.instagram?.checked,
   });
 
 const init = async () => {
-  const config = await loadConfiguration();
-  handleChangeCheckbox(config);
+  const config = await storage.get();
+  syncCheckboxesWithState(config);
 
-  elements.facebook?.addEventListener("change", handleChangeConfiguration);
-  elements.instagram?.addEventListener("change", handleChangeConfiguration);
+  elements.facebook?.addEventListener("change", updatePreferencesFromUI);
+  elements.instagram?.addEventListener("change", updatePreferencesFromUI);
 };
 
 init();
@@ -41,6 +34,7 @@ if (typeof module !== "undefined") {
       facebookStoriesEnabled: elements.facebook?.checked,
       instagramStoriesEnabled: elements.instagram?.checked,
     }),
-    handleChangeCheckbox,
+    syncCheckboxesWithState,
+    fetchUserPreferences: storage.get,
   };
 }
