@@ -11,8 +11,10 @@ global.createElement = (html) => {
 global.chrome = {
   storage: {
     sync: {
-      get: jest.fn((key, cb) => cb({})),
-      set: jest.fn((data, cb) => cb()),
+      get: jest.fn((key, callback) => callback({})),
+      set: jest.fn((data, callback) => {
+        if (callback && typeof callback === "function") callback();
+      }),
     },
     onChanged: {
       addListener: jest.fn(),
