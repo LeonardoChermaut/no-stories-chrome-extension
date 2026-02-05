@@ -1,4 +1,4 @@
-describe("Content Script", () => {
+describe("Main Script", () => {
   let MainScript;
 
   beforeEach(() => {
@@ -8,68 +8,62 @@ describe("Content Script", () => {
     jest.restoreAllMocks();
   });
 
-  describe("Domain Detection", () => {
-    test("Should return true for facebook.com", () => {
-      expect(Facebook.isFacebookDomain({ hostname: Facebook.hostname })).toBe(
-        true,
-      );
+  test("Should return true for facebook.com", () =>
+    expect(Facebook.isFacebookDomain({ hostname: Facebook.hostname })).toBe(
+      true,
+    ));
+
+  test("Should return true for instagram.com", () =>
+    expect(Instagram.isInstagramDomain({ hostname: Instagram.hostname })).toBe(
+      true,
+    ));
+
+  test("Should add attribute if on Instagram and config is true", () => {
+    jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(true);
+    jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(false);
+
+    MainScript = require("../src/main");
+
+    MainScript.setStoriesVisibilityDataAttributes({
+      instagramStoriesEnabled: true,
     });
 
-    test("Should return true for instagram.com", () => {
-      expect(
-        Instagram.isInstagramDomain({ hostname: Instagram.hostname }),
-      ).toBe(true);
-    });
+    expect(
+      document.documentElement.getAttribute("data-no-stories-instagram"),
+    ).toBe("enabled");
   });
 
-  describe("setStoriesVisibilityDataAttributes", () => {
-    test("Should add attribute if on Instagram and config is true", () => {
-      jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(true);
-      jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(false);
+  test("Should remove attribute if on Instagram and config is false", () => {
+    jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(true);
+    jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(false);
 
-      MainScript = require("../src/main");
+    MainScript = require("../src/main");
+    document.documentElement.setAttribute(
+      "data-no-stories-instagram",
+      "enabled",
+    );
 
-      MainScript.setStoriesVisibilityDataAttributes({
-        instagramStoriesEnabled: true,
-      });
-
-      expect(
-        document.documentElement.getAttribute("data-no-stories-instagram"),
-      ).toBe("enabled");
+    MainScript.setStoriesVisibilityDataAttributes({
+      instagramStoriesEnabled: false,
     });
 
-    test("Should remove attribute if on Instagram and config is false", () => {
-      jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(true);
-      jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(false);
+    expect(
+      document.documentElement.hasAttribute("data-no-stories-instagram"),
+    ).toBe(false);
+  });
 
-      MainScript = require("../src/main");
-      document.documentElement.setAttribute(
-        "data-no-stories-instagram",
-        "enabled",
-      );
+  test("Should not add Instagram attribute if on Facebook", () => {
+    jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(false);
+    jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(true);
 
-      MainScript.setStoriesVisibilityDataAttributes({
-        instagramStoriesEnabled: false,
-      });
+    MainScript = require("../src/main");
 
-      expect(
-        document.documentElement.hasAttribute("data-no-stories-instagram"),
-      ).toBe(false);
+    MainScript.setStoriesVisibilityDataAttributes({
+      instagramStoriesEnabled: true,
     });
 
-    test("Should not add Instagram attribute if on Facebook", () => {
-      jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(false);
-      jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(true);
-
-      MainScript = require("../src/main");
-
-      MainScript.setStoriesVisibilityDataAttributes({
-        instagramStoriesEnabled: true,
-      });
-
-      expect(
-        document.documentElement.hasAttribute("data-no-stories-instagram"),
-      ).toBe(false);
-    });
+    expect(
+      document.documentElement.hasAttribute("data-no-stories-instagram"),
+    ).toBe(false);
   });
 });
