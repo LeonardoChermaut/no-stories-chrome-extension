@@ -34,7 +34,7 @@
         instagramStoriesEnabled: elements.instagram?.checked,
       }),
       syncCheckboxesWithState,
-      fetchUserPreferences: Utils.storage.get,
+      fetchUserPreferences: () => Utils.storage.get(),
     };
   }
 })();

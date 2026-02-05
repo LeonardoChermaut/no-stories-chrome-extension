@@ -4,11 +4,7 @@
     observer: null,
   };
 
-  const {
-    reloadPage,
-    debounce,
-    storage: { STORIES_KEY, get },
-  } = Utils;
+  const { reloadPage, debounce, storage } = Utils;
 
   const { isFacebookDomain, removeStoriesFromDom: removeFacebookStories } =
     Facebook;
@@ -19,17 +15,22 @@
     if (!config) return;
     const html = document.documentElement;
 
-    if (config.facebookStoriesEnabled) {
+    const hideFacebook =
+      isFacebookDomain() && config.facebookStoriesEnabled === true;
+    const hideInstagram =
+      isInstagramDomain() && config.instagramStoriesEnabled === true;
+
+    if (hideFacebook) {
       html.setAttribute("data-no-stories-facebook", "enabled");
     } else {
       html.removeAttribute("data-no-stories-facebook");
     }
 
-    // if (config.instagramStoriesEnabled) {
-    //   html.setAttribute("data-no-stories-instagram", "enabled");
-    // } else {
-    //   html.removeAttribute("data-no-stories-instagram");
-    // }
+    if (hideInstagram) {
+      html.setAttribute("data-no-stories-instagram", "enabled");
+    } else {
+      html.removeAttribute("data-no-stories-instagram");
+    }
   };
 
   const handleRemoveStories = () => {
@@ -54,27 +55,24 @@
   };
 
   const handleChangeConfiguration = (changes, area) => {
-    if (area !== "sync" || !changes[STORIES_KEY]) return;
+    if (area !== "sync" || !changes[storage.STORAGE_KEY]) return;
 
     const previous = state.config;
-    const current = changes[STORIES_KEY]?.newValue;
+    const current = changes[storage.STORAGE_KEY]?.newValue;
 
     if (!current) return;
 
-    if (
+    const shouldReloadFacebookPage =
       isFacebookDomain() &&
       previous.facebookStoriesEnabled &&
-      !current.facebookStoriesEnabled
-    ) {
-      reloadPage();
-      return;
-    }
+      !current.facebookStoriesEnabled;
 
-    if (
+    const shouldReloadInstagramPage =
       isInstagramDomain() &&
       previous.instagramStoriesEnabled &&
-      !current.instagramStoriesEnabled
-    ) {
+      !current.instagramStoriesEnabled;
+
+    if (shouldReloadFacebookPage || shouldReloadInstagramPage) {
       reloadPage();
       return;
     }
@@ -85,10 +83,9 @@
   };
 
   const init = async () => {
-    state.config = await get();
+    state.config = await storage.get();
 
-    // TODO: Fix this so that when stories are enabled to be viewed, the CSS properties are not imported.
-    // updateCssAttributes(state.config);
+    updateCssAttributes(state.config);
     handleRemoveStories();
     setupMutationObserver();
 
@@ -100,7 +97,8 @@
 
   if (typeof module !== "undefined") {
     module.exports = {
-      fetchUserPreferences: get,
+      fetchUserPreferences: () => storage.get(),
+      updateCssAttributes,
     };
   }
 })();

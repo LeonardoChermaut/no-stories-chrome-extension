@@ -1,20 +1,20 @@
 const Utils = {
   storage: {
-    STORIES_KEY: "disableStoriesConfig",
+    STORAGE_KEY: "disableStoriesConfig",
     defaultConfig: {
       facebookStoriesEnabled: true,
       instagramStoriesEnabled: true,
     },
     get: () =>
       new Promise((resolve) =>
-        chrome.storage.sync.get(Utils.storage.STORIES_KEY, (result) =>
+        chrome.storage.sync.get([Utils.storage.STORAGE_KEY], (result) =>
           resolve(
-            result[Utils.storage.STORIES_KEY] || Utils.storage.defaultConfig,
+            result[Utils.storage.STORAGE_KEY] || Utils.storage.defaultConfig,
           ),
         ),
       ),
     set: (config) =>
-      chrome.storage.sync.set({ [Utils.storage.STORIES_KEY]: config }),
+      chrome.storage.sync.set({ [Utils.storage.STORAGE_KEY]: config }),
   },
 
   debounce: (func = () => {}, wait = 500) => {
