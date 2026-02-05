@@ -11,7 +11,7 @@
   const { isInstagramDomain, removeStoriesFromDom: removeInstagramStories } =
     Instagram;
 
-  const updateCssAttributes = (config) => {
+  const setStoriesVisibilityDataAttributes = (config) => {
     if (!config) return;
     const html = document.documentElement;
 
@@ -33,7 +33,7 @@
     }
   };
 
-  const handleRemoveStories = () => {
+  const removeStoriesIfEnabled = () => {
     if (isFacebookDomain() && state.config.facebookStoriesEnabled) {
       removeFacebookStories();
     }
@@ -46,7 +46,7 @@
   const setupMutationObserver = () => {
     if (state.observer) state.observer.disconnect();
 
-    const debouncedRemove = debounce(handleRemoveStories, 150);
+    const debouncedRemove = debounce(removeStoriesIfEnabled, 150);
     state.observer = new MutationObserver(debouncedRemove);
     state.observer.observe(document.documentElement, {
       childList: true,
@@ -54,7 +54,7 @@
     });
   };
 
-  const handleChangeConfiguration = (changes, area) => {
+  const onConfigurationChanged = (changes, area) => {
     if (area !== "sync" || !changes[storage.STORAGE_KEY]) return;
 
     const previous = state.config;
@@ -78,18 +78,18 @@
     }
 
     state.config = current;
-    updateCssAttributes(current);
-    handleRemoveStories();
+    setStoriesVisibilityDataAttributes(current);
+    removeStoriesIfEnabled();
   };
 
   const init = async () => {
     state.config = await storage.get();
 
-    updateCssAttributes(state.config);
-    handleRemoveStories();
+    setStoriesVisibilityDataAttributes(state.config);
+    removeStoriesIfEnabled();
     setupMutationObserver();
 
-    chrome.storage.onChanged.addListener(handleChangeConfiguration);
+    chrome.storage.onChanged.addListener(onConfigurationChanged);
     console.log("[NO STORIES] Optimized script active");
   };
 
@@ -98,7 +98,7 @@
   if (typeof module !== "undefined") {
     module.exports = {
       fetchUserPreferences: () => storage.get(),
-      updateCssAttributes,
+      setStoriesVisibilityDataAttributes,
     };
   }
 })();

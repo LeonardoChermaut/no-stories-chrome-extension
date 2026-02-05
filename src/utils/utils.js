@@ -27,8 +27,6 @@ const Utils = {
 
   reloadPage: () => window.location.reload(),
 
-  getElementById: (id) => document.getElementById(id),
-
   removeElementsBySelectors: (selectors) => {
     for (const selector of selectors) {
       const elements = document.querySelectorAll(selector);

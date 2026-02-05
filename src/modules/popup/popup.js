@@ -1,7 +1,7 @@
 (() => {
   const elements = {
-    facebook: Utils.getElementById("facebook"),
-    instagram: Utils.getElementById("instagram"),
+    facebook: document.getElementById("facebook"),
+    instagram: document.getElementById("instagram"),
   };
 
   const syncCheckboxesWithState = (config) => {

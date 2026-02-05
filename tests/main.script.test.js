@@ -22,14 +22,16 @@ describe("Content Script", () => {
     });
   });
 
-  describe("updateCssAttributes", () => {
+  describe("setStoriesVisibilityDataAttributes", () => {
     test("Should add attribute if on Instagram and config is true", () => {
       jest.spyOn(Instagram, "isInstagramDomain").mockReturnValue(true);
       jest.spyOn(Facebook, "isFacebookDomain").mockReturnValue(false);
 
       MainScript = require("../src/main");
 
-      MainScript.updateCssAttributes({ instagramStoriesEnabled: true });
+      MainScript.setStoriesVisibilityDataAttributes({
+        instagramStoriesEnabled: true,
+      });
 
       expect(
         document.documentElement.getAttribute("data-no-stories-instagram"),
@@ -46,7 +48,9 @@ describe("Content Script", () => {
         "enabled",
       );
 
-      MainScript.updateCssAttributes({ instagramStoriesEnabled: false });
+      MainScript.setStoriesVisibilityDataAttributes({
+        instagramStoriesEnabled: false,
+      });
 
       expect(
         document.documentElement.hasAttribute("data-no-stories-instagram"),
@@ -59,7 +63,9 @@ describe("Content Script", () => {
 
       MainScript = require("../src/main");
 
-      MainScript.updateCssAttributes({ instagramStoriesEnabled: true });
+      MainScript.setStoriesVisibilityDataAttributes({
+        instagramStoriesEnabled: true,
+      });
 
       expect(
         document.documentElement.hasAttribute("data-no-stories-instagram"),
