@@ -14,38 +14,34 @@
   const { isInstagramDomain, removeStoriesFromDom: removeInstagramStories } =
     Instagram;
 
-  const setStoriesVisibilityDataAttributes = (config) => {
+  const setVisibilityDataAttributes = (config) => {
     if (!config) return;
     const html = document.documentElement;
 
-    const hideFacebook =
+    const hideFacebookStories =
       isFacebookDomain() && config.facebookStoriesEnabled === true;
-    const hideInstagram =
-      isInstagramDomain() && config.instagramStoriesEnabled === true;
-
     const hideFacebookAds =
       isFacebookDomain() && config.facebookAdsEnabled === true;
+    const hideInstagramStories =
+      isInstagramDomain() && config.instagramStoriesEnabled === true;
 
-    if (hideFacebook) {
-      html.setAttribute("data-no-stories-facebook", "enabled");
-    } else {
-      html.removeAttribute("data-no-stories-facebook");
-    }
+    const htmlMap = [
+      { condition: hideFacebookStories, attribute: "data-no-stories-facebook" },
+      { condition: hideFacebookAds, attribute: "data-no-ads-facebook" },
+      {
+        condition: hideInstagramStories,
+        attribute: "data-no-stories-instagram",
+      },
+    ];
 
-    if (hideInstagram) {
-      html.setAttribute("data-no-stories-instagram", "enabled");
-    } else {
-      html.removeAttribute("data-no-stories-instagram");
-    }
-
-    if (hideFacebookAds) {
-      html.setAttribute("data-no-ads-facebook", "enabled");
-    } else {
-      html.removeAttribute("data-no-ads-facebook");
-    }
+    htmlMap.forEach(({ condition, attribute }) =>
+      condition
+        ? html.setAttribute(attribute, "enabled")
+        : html.removeAttribute(attribute),
+    );
   };
 
-  const removeStoriesIfEnabled = () => {
+  const removeConfigurationIfEnabled = () => {
     if (isFacebookDomain()) {
       if (state.config.facebookStoriesEnabled) {
         removeFacebookStories();
@@ -63,7 +59,7 @@
   const setupMutationObserver = () => {
     if (state.observer) state.observer.disconnect();
 
-    const debouncedRemove = debounce(removeStoriesIfEnabled, 150);
+    const debouncedRemove = debounce(removeConfigurationIfEnabled, 150);
     state.observer = new MutationObserver(debouncedRemove);
     state.observer.observe(document.documentElement, {
       childList: true,
@@ -95,15 +91,15 @@
     }
 
     state.config = current;
-    setStoriesVisibilityDataAttributes(current);
-    removeStoriesIfEnabled();
+    setVisibilityDataAttributes(current);
+    removeConfigurationIfEnabled();
   };
 
   const init = async () => {
     state.config = await storage.get();
 
-    setStoriesVisibilityDataAttributes(state.config);
-    removeStoriesIfEnabled();
+    setVisibilityDataAttributes(state.config);
+    removeConfigurationIfEnabled();
     setupMutationObserver();
 
     chrome.storage.onChanged.addListener(onConfigurationChanged);
@@ -115,7 +111,7 @@
   if (typeof module !== "undefined") {
     module.exports = {
       fetchUserPreferences: () => storage.get(),
-      setStoriesVisibilityDataAttributes,
+      setVisibilityDataAttributes,
     };
   }
 })();

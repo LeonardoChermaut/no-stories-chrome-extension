@@ -24,7 +24,7 @@ describe("Main Script", () => {
 
     MainScript = require("../src/main");
 
-    MainScript.setStoriesVisibilityDataAttributes({
+    MainScript.setVisibilityDataAttributes({
       instagramStoriesEnabled: true,
     });
 
@@ -43,7 +43,7 @@ describe("Main Script", () => {
       "enabled",
     );
 
-    MainScript.setStoriesVisibilityDataAttributes({
+    MainScript.setVisibilityDataAttributes({
       instagramStoriesEnabled: false,
     });
 
@@ -58,7 +58,7 @@ describe("Main Script", () => {
 
     MainScript = require("../src/main");
 
-    MainScript.setStoriesVisibilityDataAttributes({
+    MainScript.setVisibilityDataAttributes({
       instagramStoriesEnabled: true,
     });
 
