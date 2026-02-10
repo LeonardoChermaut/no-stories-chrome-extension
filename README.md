@@ -1,13 +1,13 @@
 # NO STORIES
 
-O **NO STORIES** é uma extensão para Google Chrome que remove a seção de "Stories" do Facebook e do Instagram.
-O projeto não rastreia dados, não exibe anúncios e roda localmente no navegador.
+O **NO STORIES** é uma extensão para Google Chrome que remove as seções de "Stories" do Facebook e do Instagram, além de limpar posts patrocinados (anúncios) no feed do Facebook.
+O projeto não rastreia dados, não exibe anúncios próprios e roda localmente no navegador.
 
 ## Funcionalidades
 
-- **Facebook**: Remove o carrossel de stories.
+- **Facebook**: Remove o carrossel de stories e posts patrocinados.
 - **Instagram**: Esconde a barra de stories.
-- **Controle**: Ativação individual para cada rede social.
+- **Controle**: Ativação individual para cada bloqueio via popup.
 
 ## Instalação
 
@@ -25,8 +25,8 @@ A instalação é feita manualmente pelo Modo do Desenvolvedor.
 ## Uso
 
 1. Clique no ícone da extensão na barra de ferramentas.
-2. Utilize as caixas de seleção para ativar ou desativar o bloqueio por rede social.
-3. A página recarregará automaticamente ao alterar a configuração para exibir os stories novamente.
+2. Utilize as caixas de seleção para ativar ou desativar o bloqueio de Stories ou Anúncios.
+3. A página recarregará automaticamente ao desativar uma configuração para restaurar a exibição original.
 
 ## Testes
 
