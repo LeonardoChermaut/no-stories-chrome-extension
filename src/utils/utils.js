@@ -4,6 +4,7 @@ const Utils = {
     defaultConfig: {
       facebookStoriesEnabled: true,
       instagramStoriesEnabled: true,
+      facebookAdsEnabled: true,
     },
     get: () =>
       new Promise((resolve) =>

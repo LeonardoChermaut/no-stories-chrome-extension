@@ -1,6 +1,7 @@
 describe("Popup", () => {
   let facebookCheckboxEl;
   let instagramCheckboxEl;
+  let facebookAdsCheckboxEl;
   let getCurrentConfig;
   let handleChangeCheckbox;
 
@@ -8,9 +9,11 @@ describe("Popup", () => {
     jest.resetModules();
     createElement('<input type="checkbox" id="facebook" />');
     createElement('<input type="checkbox" id="instagram" />');
+    createElement('<input type="checkbox" id="facebookAds" />');
 
     facebookCheckboxEl = document.getElementById("facebook");
     instagramCheckboxEl = document.getElementById("instagram");
+    facebookAdsCheckboxEl = document.getElementById("facebookAds");
 
     const Popup = require("../src/modules/popup/popup");
 
@@ -21,11 +24,13 @@ describe("Popup", () => {
   test("Should get current config", () => {
     facebookCheckboxEl.checked = true;
     instagramCheckboxEl.checked = false;
+    facebookAdsCheckboxEl.checked = true;
     const config = getCurrentConfig();
 
     expect(config).toEqual({
       facebookStoriesEnabled: true,
       instagramStoriesEnabled: false,
+      facebookAdsEnabled: true,
     });
   });
 
@@ -33,9 +38,11 @@ describe("Popup", () => {
     handleChangeCheckbox({
       facebookStoriesEnabled: false,
       instagramStoriesEnabled: true,
+      facebookAdsEnabled: false,
     });
 
     expect(facebookCheckboxEl.checked).toBe(false);
     expect(instagramCheckboxEl.checked).toBe(true);
+    expect(facebookAdsCheckboxEl.checked).toBe(false);
   });
 });

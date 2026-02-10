@@ -5,3 +5,7 @@ html[data-no-stories-facebook="enabled"] [data-pagelet*="Stories"],
 html[data-no-stories-facebook="enabled"] [data-pagelet*="story"] {
     display: none !important;
 }
+
+html[data-no-ads-facebook="enabled"] div[data-visualcompletion="ignore-late-mutation"] {
+    display: none !important;
+}

@@ -6,8 +6,11 @@
 
   const { reloadPage, debounce, storage } = Utils;
 
-  const { isFacebookDomain, removeStoriesFromDom: removeFacebookStories } =
-    Facebook;
+  const {
+    isFacebookDomain,
+    removeStoriesFromDom: removeFacebookStories,
+    removeAdsFromDom: removeFacebookAds,
+  } = Facebook;
   const { isInstagramDomain, removeStoriesFromDom: removeInstagramStories } =
     Instagram;
 
@@ -20,6 +23,9 @@
     const hideInstagram =
       isInstagramDomain() && config.instagramStoriesEnabled === true;
 
+    const hideFacebookAds =
+      isFacebookDomain() && config.facebookAdsEnabled === true;
+
     if (hideFacebook) {
       html.setAttribute("data-no-stories-facebook", "enabled");
     } else {
@@ -31,11 +37,22 @@
     } else {
       html.removeAttribute("data-no-stories-instagram");
     }
+
+    if (hideFacebookAds) {
+      html.setAttribute("data-no-ads-facebook", "enabled");
+    } else {
+      html.removeAttribute("data-no-ads-facebook");
+    }
   };
 
   const removeStoriesIfEnabled = () => {
-    if (isFacebookDomain() && state.config.facebookStoriesEnabled) {
-      removeFacebookStories();
+    if (isFacebookDomain()) {
+      if (state.config.facebookStoriesEnabled) {
+        removeFacebookStories();
+      }
+      if (state.config.facebookAdsEnabled) {
+        removeFacebookAds();
+      }
     }
 
     if (isInstagramDomain() && state.config.instagramStoriesEnabled) {
@@ -64,8 +81,8 @@
 
     const shouldReloadFacebookPage =
       isFacebookDomain() &&
-      previous.facebookStoriesEnabled &&
-      !current.facebookStoriesEnabled;
+      ((previous.facebookStoriesEnabled && !current.facebookStoriesEnabled) ||
+        (previous.facebookAdsEnabled && !current.facebookAdsEnabled));
 
     const shouldReloadInstagramPage =
       isInstagramDomain() &&

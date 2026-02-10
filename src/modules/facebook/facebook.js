@@ -9,11 +9,16 @@ const Facebook = {
     '[data-pagelet*="story"]',
   ],
 
+  sponsoredSelectors: ["div[data-visualcompletion='ignore-late-mutation']"],
+
   removeStoriesFromDom: () =>
     Utils.removeElementsBySelectors(Facebook.storyContainersSelectors),
 
   isFacebookDomain: (loc = location) =>
     loc.hostname.includes(Facebook.hostname),
+
+  removeAdsFromDom: () =>
+    Utils.removeElementsBySelectors(Facebook.sponsoredSelectors),
 };
 
 if (typeof window !== "undefined") window.Facebook = Facebook;
